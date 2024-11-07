@@ -8,6 +8,14 @@ Install the library via [NuGet](https://www.nuget.org/packages/firecrawl-dotnet)
 dotnet add package firecrawl-dotnet
 ```
 
+### Extensions
+Install optional library extensions for more functionality, depending on your use case.
+#### Dependency Injection
+Integrate firecrawl-dotnet and your DI container of choice. Install the extension library via [NuGet](https://www.nuget.org/packages/firecrawl-dotnet-dependencyinjection):
+```bash
+dotnet add package firecrawl-dotnet-dependencyinjection
+```
+
 
 ## Usage
 1. Obtain an API key from the [Firecrawl Dashboard](https://www.firecrawl.dev/app) (requires a Firecrawl account).
@@ -15,7 +23,7 @@ dotnet add package firecrawl-dotnet
 3. Use the methods available on `FirecrawlService` to interact with the Firecrawl API.
 
 ### Initialization
-The library can be initialized in two ways:
+The library can be initialized in three ways:
 #### Basic Initialization
 Pass in your API key directly:
 ```csharp
@@ -34,6 +42,28 @@ httpClient.DefaultRequestHeaders.Authorization =
 	new AuthenticationHeaderValue("Bearer", "YOUR_FIRECRAWL_API_KEY");
 
 var firecrawl = new FirecrawlService(httpClient);
+```
+#### Dependency Injection
+If you've installed the appropriate extension library.
+1. Register `FirecrawlService` with your dependency container:
+```csharp
+services.AddFirecrawlHttpClient(options =>
+{
+	options.BaseUrl = new Uri("https://api.firecrawl.dev/v1/");
+	options.ApiKey = "YOUR_FIRECRAWL_API_KEY";
+});
+```
+2. Inject `IFirecrawlService` where needed:
+```csharp
+public class MyClass
+{
+    private readonly IFirecrawlService firecrawl;
+
+    public MyClass(IFirecrawlService firecrawl)
+    {
+        this.firecrawl = firecrawl;
+    }
+}
 ```
 
 
