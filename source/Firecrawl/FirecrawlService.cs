@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Text.Json;
-using System.Net.Http.Json;
 using System.Net;
-using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Globalization;
 
 namespace Firecrawl
@@ -29,7 +31,8 @@ namespace Firecrawl
 		private static JsonSerializerOptions JsonSerializerOptions { get; } =
 			new JsonSerializerOptions()
 			{
-
+				DefaultIgnoreCondition =
+					JsonIgnoreCondition.WhenWritingNull
 			};
 
 		/// <summary>
@@ -186,7 +189,11 @@ namespace Firecrawl
 					.PostAsJsonAsync(
 						requestUri,
 						options,
+						JsonSerializerOptions,
 						cancellationToken);
+
+			var strRequest = await response.RequestMessage.Content.ReadAsStringAsync();
+			var strResponse = await response.Content.ReadAsStringAsync();
 
 			return await ProcessResponseAsync<FirecrawlScrapeResult>(
 				response,
@@ -220,6 +227,7 @@ namespace Firecrawl
 					.PostAsJsonAsync(
 						requestUri,
 						options,
+						JsonSerializerOptions,
 						cancellationToken);
 
 			return await ProcessResponseAsync<FirecrawlCrawlResult>(
@@ -322,6 +330,7 @@ namespace Firecrawl
 					.PostAsJsonAsync(
 						requestUri,
 						options,
+						JsonSerializerOptions,
 						cancellationToken);
 
 			return await ProcessResponseAsync<FirecrawlMapResult>(
@@ -356,6 +365,7 @@ namespace Firecrawl
 					.PostAsJsonAsync(
 						requestUri,
 						options,
+						JsonSerializerOptions,
 						cancellationToken);
 
 			return await ProcessResponseAsync<FirecrawlBatchScrapeResult>(

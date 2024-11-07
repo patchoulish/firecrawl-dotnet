@@ -24,14 +24,16 @@ namespace Firecrawl
 		/// </summary>
 		[JsonPropertyName(
 			"includePaths")]
-		public ImmutableArray<string> IncludedPaths { get; init; }
+		public ImmutableArray<string> IncludedPaths { get; init; } =
+			ImmutableArray<string>.Empty;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		[JsonPropertyName(
 			"excludePaths")]
-		public ImmutableArray<string> ExcludedPaths { get; init; }
+		public ImmutableArray<string> ExcludedPaths { get; init; } =
+			ImmutableArray<string>.Empty;
 
 		/// <summary>
 		/// 

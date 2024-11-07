@@ -17,28 +17,32 @@ namespace Firecrawl
 		/// </summary>
 		[JsonPropertyName(
 			"formats")]
-		public ImmutableArray<FirecrawlFormat> Formats { get; init; }
+		public ImmutableArray<FirecrawlFormat> Formats { get; init; } =
+			ImmutableArray<FirecrawlFormat>.Empty;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		[JsonPropertyName(
 			"headers")]
-		public ImmutableDictionary<string, string> Headers { get; init; }
+		public ImmutableDictionary<string, string> Headers { get; init; } =
+			ImmutableDictionary<string, string>.Empty;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		[JsonPropertyName(
 			"includeTags")]
-		public ImmutableArray<string> IncludedTags { get; init; }
+		public ImmutableArray<string> IncludedTags { get; init; } =
+			ImmutableArray<string>.Empty;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		[JsonPropertyName(
 			"excludeTags")]
-		public ImmutableArray<string> ExcludedTags { get; init; }
+		public ImmutableArray<string> ExcludedTags { get; init; } =
+			ImmutableArray<string>.Empty;
 
 		/// <summary>
 		/// 

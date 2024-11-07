@@ -24,6 +24,7 @@ namespace Firecrawl
 		/// </summary>
 		[JsonPropertyName(
 			"languages")]
-		public ImmutableArray<string> Languages { get; init; }
+		public ImmutableArray<string> Languages { get; init; } =
+			ImmutableArray<string>.Empty;
 	}
 }

@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Collections;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 
 namespace Firecrawl
 {
@@ -58,6 +58,6 @@ namespace Firecrawl
 		/// 
 		/// </summary>
 		[JsonExtensionData]
-		public ImmutableDictionary<string, string> Extra { get; init; }
+		public Dictionary<string, JsonElement> ExtensionData { get; init; }
 	}
 }
