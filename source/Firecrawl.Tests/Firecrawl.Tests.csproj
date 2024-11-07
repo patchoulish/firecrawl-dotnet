@@ -17,6 +17,7 @@
 	
 	<!-- Project reference(s) -->
 	<ItemGroup>
+		<ProjectReference Include="..\Firecrawl.Extensions.DependencyInjection\Firecrawl.Extensions.DependencyInjection.csproj" />
 		<ProjectReference Include="..\Firecrawl\Firecrawl.csproj" />
 	</ItemGroup>
 </Project>
