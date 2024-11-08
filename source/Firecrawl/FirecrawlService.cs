@@ -45,15 +45,13 @@ namespace Firecrawl
 			Uri baseUrl,
 			string apiKey)
 		{
-			ArgumentNullException
-				.ThrowIfNull(
-					baseUrl,
-					nameof(baseUrl));
+			Guard.NotNull(
+				baseUrl,
+				nameof(baseUrl));
 
-			ArgumentException
-				.ThrowIfNullOrEmpty(
-					apiKey,
-					nameof(apiKey));
+			Guard.NotNullOrEmpty(
+				apiKey,
+				nameof(apiKey));
 
 			var client =
 				new HttpClient();
@@ -154,10 +152,9 @@ namespace Firecrawl
 		public FirecrawlService(
 			HttpClient httpClient)
 		{
-			ArgumentNullException
-				.ThrowIfNull(
-					httpClient,
-					nameof(httpClient));
+			Guard.NotNull(
+				httpClient,
+				nameof(httpClient));
 
 			this.httpClient = httpClient;
 		}
@@ -172,10 +169,9 @@ namespace Firecrawl
 			FirecrawlScrapeOptions options,
 			CancellationToken cancellationToken = default)
 		{
-			ArgumentNullException
-				.ThrowIfNull(
-					options,
-					nameof(options));
+			Guard.NotNull(
+				options,
+				nameof(options));
 
 			if (!TryCreateScrapeUrl(
 				out var requestUri))
@@ -192,9 +188,6 @@ namespace Firecrawl
 						JsonSerializerOptions,
 						cancellationToken);
 
-			var strRequest = await response.RequestMessage.Content.ReadAsStringAsync();
-			var strResponse = await response.Content.ReadAsStringAsync();
-
 			return await ProcessResponseAsync<FirecrawlScrapeResult>(
 				response,
 				cancellationToken);
@@ -210,10 +203,9 @@ namespace Firecrawl
 			FirecrawlCrawlOptions options,
 			CancellationToken cancellationToken = default)
 		{
-			ArgumentNullException
-				.ThrowIfNull(
-					options,
-					nameof(options));
+			Guard.NotNull(
+				options,
+				nameof(options));
 
 			if (!TryCreateCrawlUrl(
 				out var requestUri))
@@ -245,10 +237,9 @@ namespace Firecrawl
 			string id,
 			CancellationToken cancellationToken = default)
 		{
-			ArgumentException
-				.ThrowIfNullOrEmpty(
-					id,
-					nameof(id));
+			Guard.NotNullOrEmpty(
+				id,
+				nameof(id));
 
 			if (!TryCreateCrawlResourceUrl(
 				id,
@@ -279,10 +270,9 @@ namespace Firecrawl
 			string id,
 			CancellationToken cancellationToken = default)
 		{
-			ArgumentException
-				.ThrowIfNullOrEmpty(
-					id,
-					nameof(id));
+			Guard.NotNullOrEmpty(
+				id,
+				nameof(id));
 
 			if (!TryCreateCrawlResourceUrl(
 				id,
@@ -313,10 +303,9 @@ namespace Firecrawl
 			FirecrawlMapOptions options,
 			CancellationToken cancellationToken = default)
 		{
-			ArgumentNullException
-				.ThrowIfNull(
-					options,
-					nameof(options));
+			Guard.NotNull(
+				options,
+				nameof(options));
 
 			if (!TryCreateMapUrl(
 				out var requestUri))
@@ -348,10 +337,9 @@ namespace Firecrawl
 			FirecrawlBatchScrapeOptions options,
 			CancellationToken cancellationToken = default)
 		{
-			ArgumentNullException
-				.ThrowIfNull(
-					options,
-					nameof(options));
+			Guard.NotNull(
+				options,
+				nameof(options));
 
 			if (!TryCreateBatchScrapeUrl(
 				out var requestUri))
@@ -383,10 +371,9 @@ namespace Firecrawl
 			string id,
 			CancellationToken cancellationToken = default)
 		{
-			ArgumentException
-				.ThrowIfNullOrEmpty(
-					id,
-					nameof(id));
+			Guard.NotNullOrEmpty(
+				id,
+				nameof(id));
 
 			if (!TryCreateBatchScrapeResourceUrl(
 				id,

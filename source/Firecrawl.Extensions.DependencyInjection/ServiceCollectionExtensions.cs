@@ -30,10 +30,9 @@ namespace Firecrawl
 			this IServiceCollection services,
 			Action<FirecrawlServiceOptions> optionsCallback = default)
 		{
-			ArgumentNullException
-				.ThrowIfNull(
-					services,
-					nameof(services));
+			Guard.NotNull(
+				services,
+				nameof(services));
 
 			var options =
 				new FirecrawlServiceOptions();
