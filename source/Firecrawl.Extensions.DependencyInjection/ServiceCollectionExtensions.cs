@@ -37,6 +37,10 @@ namespace Firecrawl
 			var options =
 				new FirecrawlServiceOptions();
 
+			optionsCallback?
+				.Invoke(
+					options);
+
 			return services
 				.AddHttpClient<IFirecrawlService, FirecrawlService>(
 					FirecrawlHttpClientName,
