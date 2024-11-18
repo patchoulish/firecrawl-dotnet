@@ -71,6 +71,8 @@ namespace Firecrawl
 		/// <param name="options"></param>
 		/// <returns></returns>
 		[TestCategory(
+			"FirecrawlService")]
+		[TestCategory(
 			"Scrape")]
 		[TestCategory(
 			"BadRequest")]
@@ -90,6 +92,8 @@ namespace Firecrawl
 		/// </summary>
 		/// <param name="options"></param>
 		/// <returns></returns>
+		[TestCategory(
+			"FirecrawlService")]
 		[TestCategory(
 			"Scrape")]
 		[TestCategory(
