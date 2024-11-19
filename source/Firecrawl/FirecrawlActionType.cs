@@ -2,8 +2,6 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Runtime;
-using System.Runtime.Serialization;
 
 namespace Firecrawl
 {
@@ -11,56 +9,56 @@ namespace Firecrawl
 	/// 
 	/// </summary>
 	[JsonConverter(
-		typeof(JsonEnumMemberEnumConverter<FirecrawlActionType>))]
+		typeof(JsonStringEnumConverter<FirecrawlActionType>))]
 	public enum FirecrawlActionType
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "wait")]
+		[JsonStringEnumMemberName(
+			"wait")]
 		Wait,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "screenshot")]
+		[JsonStringEnumMemberName(
+			"screenshot")]
 		Screenshot,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "click")]
+		[JsonStringEnumMemberName(
+			"click")]
 		Click,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "write")]
+		[JsonStringEnumMemberName(
+			"write")]
 		Write,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "press")]
+		[JsonStringEnumMemberName(
+			"press")]
 		Press,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "scroll")]
+		[JsonStringEnumMemberName(
+			"scroll")]
 		Scroll,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "scrape")]
+		[JsonStringEnumMemberName(
+			"scrape")]
 		Scrape,
 	}
 }

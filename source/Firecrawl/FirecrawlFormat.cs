@@ -2,8 +2,6 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Runtime;
-using System.Runtime.Serialization;
 
 namespace Firecrawl
 {
@@ -11,56 +9,56 @@ namespace Firecrawl
 	/// 
 	/// </summary>
 	[JsonConverter(
-		typeof(JsonEnumMemberEnumConverter<FirecrawlFormat>))]
+		typeof(JsonStringEnumConverter<FirecrawlFormat>))]
 	public enum FirecrawlFormat
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "markdown")]
+		[JsonStringEnumMemberName(
+			"markdown")]
 		Markdown,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "html")]
+		[JsonStringEnumMemberName(
+			"html")]
 		Html,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "rawHtml")]
+		[JsonStringEnumMemberName(
+			"rawHtml")]
 		HtmlRaw,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "links")]
+		[JsonStringEnumMemberName(
+			"links")]
 		Links,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "screenshot")]
+		[JsonStringEnumMemberName(
+			"screenshot")]
 		Screenshot,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "screenshot@fullPage")]
+		[JsonStringEnumMemberName(
+			"screenshot@fullPage")]
 		ScreenshotFullPage,
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[EnumMember(
-			Value = "extract")]
+		[JsonStringEnumMemberName(
+			"extract")]
 		Extract,
 	}
 }
