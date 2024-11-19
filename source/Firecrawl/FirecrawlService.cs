@@ -2,13 +2,11 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Globalization;
 
 namespace Firecrawl
 {
@@ -26,9 +24,9 @@ namespace Firecrawl
 				"https://api.firecrawl.dev/v1/");
 
 		/// <summary>
-		/// 
+		/// The JSON serializer options for serializing and deserializing JSON data.
 		/// </summary>
-		private static JsonSerializerOptions JsonSerializerOptions { get; } =
+		internal static JsonSerializerOptions JsonSerializerOptions { get; } =
 			new JsonSerializerOptions()
 			{
 				DefaultIgnoreCondition =
@@ -53,72 +51,25 @@ namespace Firecrawl
 				apiKey,
 				nameof(apiKey));
 
-			var client =
-				new HttpClient();
+			var httpClient =
+				new HttpClient(
+					new FirecrawlDelegatingHandler()
+					{
+						InnerHandler = new HttpClientHandler()
+					},
+					disposeHandler: true);
 
-			client.BaseAddress =
+			httpClient.BaseAddress =
 				baseUrl;
 
-			client.DefaultRequestHeaders.Authorization =
-				new AuthenticationHeaderValue(
-					"Bearer",
-					apiKey);
+			httpClient.DefaultRequestHeaders.Add(
+				$"Authorization",
+				$"Bearer {apiKey}");
 
-			return client;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <typeparam name="TResult"></typeparam>
-		/// <param name="response"></param>
-		/// <param name="cancellationToken"></param>
-		/// <returns></returns>
-		/// <exception cref="FirecrawlException"></exception>
-		private static async Task<TResult> ProcessResponseAsync<TResult>(
-			HttpResponseMessage response,
-			CancellationToken cancellationToken = default)
-		{
-			if (response.StatusCode == HttpStatusCode.OK)
-			{
-				var result =
-					await response.Content
-						.ReadFromJsonAsync<TResult>(
-							JsonSerializerOptions,
-							cancellationToken);
-
-				return result;
-			}
-			else
-			{
-				var errorResult =
-					await response.Content
-						.ReadFromJsonAsync<FirecrawlErrorResult>(
-							JsonSerializerOptions,
-							cancellationToken);
-
-				throw new FirecrawlException(
-					response.StatusCode,
-					errorResult?.Message);
-			}
+			return httpClient;
 		}
 
 		private readonly HttpClient httpClient;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public Uri BaseUrl =>
-			this.httpClient
-				.BaseAddress;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public AuthenticationHeaderValue AuthorizationHeaderValue =>
-			this.httpClient
-				.DefaultRequestHeaders
-				.Authorization;
 
 		/// <summary>
 		/// 
@@ -173,24 +124,20 @@ namespace Firecrawl
 				options,
 				nameof(options));
 
-			if (!TryCreateScrapeUrl(
-				out var requestUri))
-			{
-				throw new InvalidOperationException(
-					$"Failed to create a valid URL for the request.");
-			}
-
+			// Serialize and POST the request...
 			var response =
 				await this.httpClient
 					.PostAsJsonAsync(
-						requestUri,
+						$"scrape",
 						options,
 						JsonSerializerOptions,
 						cancellationToken);
 
-			return await ProcessResponseAsync<FirecrawlScrapeResult>(
-				response,
-				cancellationToken);
+			// ...then deserialize the response and return the result.
+			return await response.Content
+				.ReadFromJsonAsync<FirecrawlScrapeResult>(
+					JsonSerializerOptions,
+					cancellationToken);
 		}
 
 		/// <summary>
@@ -207,24 +154,20 @@ namespace Firecrawl
 				options,
 				nameof(options));
 
-			if (!TryCreateCrawlUrl(
-				out var requestUri))
-			{
-				throw new InvalidOperationException(
-					$"Failed to create a valid URL for the request.");
-			}
-
+			// Serialize and POST the request...
 			var response =
 				await this.httpClient
 					.PostAsJsonAsync(
-						requestUri,
+						$"crawl",
 						options,
 						JsonSerializerOptions,
 						cancellationToken);
 
-			return await ProcessResponseAsync<FirecrawlCrawlResult>(
-				response,
-				cancellationToken);
+			// ...then deserialize the response and return the result.
+			return await response.Content
+				.ReadFromJsonAsync<FirecrawlCrawlResult>(
+					JsonSerializerOptions,
+					cancellationToken);
 		}
 
 		/// <summary>
@@ -241,23 +184,11 @@ namespace Firecrawl
 				id,
 				nameof(id));
 
-			if (!TryCreateCrawlResourceUrl(
-				id,
-				out var requestUri))
-			{
-				throw new InvalidOperationException(
-					$"Failed to create a valid URL for the request.");
-			}
-
-			var response =
-				await this.httpClient
-					.GetAsync(
-						requestUri,
-						cancellationToken);
-
-			return await ProcessResponseAsync<FirecrawlCrawlStatusResult>(
-				response,
-				cancellationToken);
+			return await this.httpClient
+				.GetFromJsonAsync<FirecrawlCrawlStatusResult>(
+					$"crawl/{id}",
+					JsonSerializerOptions,
+					cancellationToken);
 		}
 
 		/// <summary>
@@ -274,23 +205,11 @@ namespace Firecrawl
 				id,
 				nameof(id));
 
-			if (!TryCreateCrawlResourceUrl(
-				id,
-				out var requestUri))
-			{
-				throw new InvalidOperationException(
-					$"Failed to create a valid URL for the request.");
-			}
-
-			var response =
-				await this.httpClient
-					.DeleteAsync(
-						requestUri,
-						cancellationToken);
-
-			return await ProcessResponseAsync<FirecrawlCrawlCancellationResult>(
-				response,
-				cancellationToken);
+			return await this.httpClient
+				.DeleteFromJsonAsync<FirecrawlCrawlCancellationResult>(
+					$"crawl/{id}",
+					JsonSerializerOptions,
+					cancellationToken);
 		}
 
 		/// <summary>
@@ -307,24 +226,20 @@ namespace Firecrawl
 				options,
 				nameof(options));
 
-			if (!TryCreateMapUrl(
-				out var requestUri))
-			{
-				throw new InvalidOperationException(
-					$"Failed to create a valid URL for the request.");
-			}
-
+			// Serialize and POST the request...
 			var response =
 				await this.httpClient
 					.PostAsJsonAsync(
-						requestUri,
+						$"map",
 						options,
 						JsonSerializerOptions,
 						cancellationToken);
 
-			return await ProcessResponseAsync<FirecrawlMapResult>(
-				response,
-				cancellationToken);
+			// ...then deserialize the response and return the result.
+			return await response.Content
+				.ReadFromJsonAsync<FirecrawlMapResult>(
+					JsonSerializerOptions,
+					cancellationToken);
 		}
 
 		/// <summary>
@@ -341,24 +256,20 @@ namespace Firecrawl
 				options,
 				nameof(options));
 
-			if (!TryCreateBatchScrapeUrl(
-				out var requestUri))
-			{
-				throw new InvalidOperationException(
-					$"Failed to create a valid URL for the request.");
-			}
-
+			// Serialize and POST the request...
 			var response =
 				await this.httpClient
 					.PostAsJsonAsync(
-						requestUri,
+						$"batch/scrape",
 						options,
 						JsonSerializerOptions,
 						cancellationToken);
 
-			return await ProcessResponseAsync<FirecrawlBatchScrapeResult>(
-				response,
-				cancellationToken);
+			// ...then deserialize the response and return the result.
+			return await response.Content
+				.ReadFromJsonAsync<FirecrawlBatchScrapeResult>(
+					JsonSerializerOptions,
+					cancellationToken);
 		}
 
 		/// <summary>
@@ -375,105 +286,11 @@ namespace Firecrawl
 				id,
 				nameof(id));
 
-			if (!TryCreateBatchScrapeResourceUrl(
-				id,
-				out var requestUri))
-			{
-				throw new InvalidOperationException(
-					$"Failed to create a valid URL for the request.");
-			}
-
-			var response =
-				await this.httpClient
-					.GetAsync(
-						requestUri,
-						cancellationToken);
-
-			return await ProcessResponseAsync<FirecrawlBatchScrapeStatusResult>(
-				response,
-				cancellationToken);
+			return await this.httpClient
+				.GetFromJsonAsync<FirecrawlBatchScrapeStatusResult>(
+					$"batch/scrape/{id}",
+					JsonSerializerOptions,
+					cancellationToken);
 		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="result"></param>
-		/// <returns></returns>
-		private bool TryCreateScrapeUrl(
-			out Uri result) =>
-				Uri.TryCreate(
-					BaseUrl,
-					"scrape",
-					out result);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="result"></param>
-		/// <returns></returns>
-		private bool TryCreateCrawlUrl(
-			out Uri result) =>
-				Uri.TryCreate(
-					BaseUrl,
-					"crawl",
-					out result);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="result"></param>
-		/// <returns></returns>
-		private bool TryCreateCrawlResourceUrl(
-			string id,
-			out Uri result) =>
-				Uri.TryCreate(
-					BaseUrl,
-					String.Format(
-						CultureInfo.InvariantCulture,
-						"crawl/{0}",
-						id),
-					out result);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="result"></param>
-		/// <returns></returns>
-		private bool TryCreateMapUrl(
-			out Uri result) =>
-				Uri.TryCreate(
-					BaseUrl,
-					"map",
-					out result);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="result"></param>
-		/// <returns></returns>
-		private bool TryCreateBatchScrapeUrl(
-			out Uri result) =>
-				Uri.TryCreate(
-					BaseUrl,
-					"batch/scrape",
-					out result);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="result"></param>
-		/// <returns></returns>
-		private bool TryCreateBatchScrapeResourceUrl(
-			string id,
-			out Uri result) =>
-				Uri.TryCreate(
-					BaseUrl,
-					String.Format(
-						CultureInfo.InvariantCulture,
-						"batch/scrape/{0}",
-						id),
-					out result);
 	}
 }

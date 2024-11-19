@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 
 using Microsoft;
 using Microsoft.Extensions;
@@ -45,6 +44,7 @@ namespace Firecrawl
 					options);
 
 			return services
+				.AddTransient<FirecrawlDelegatingHandler>()
 				.AddHttpClient<IFirecrawlService, FirecrawlService>(
 					FirecrawlHttpClientName,
 					(httpClient) =>
@@ -54,11 +54,11 @@ namespace Firecrawl
 							options.BaseUrl;
 
 						// Configure the default request headers for the client.
-						httpClient.DefaultRequestHeaders.Authorization =
-							new AuthenticationHeaderValue(
-								"Bearer",
-								options.ApiKey);
-					});
+						httpClient.DefaultRequestHeaders.Add(
+							$"Authorization",
+							$"Bearer {options.ApiKey}");
+					})
+				.AddHttpMessageHandler<FirecrawlDelegatingHandler>();
 		}
 	}
 }

@@ -8,8 +8,7 @@ namespace Firecrawl
 	/// <summary>
 	/// 
 	/// </summary>
-	public class FirecrawlErrorResult :
-		FirecrawlResult
+	public class FirecrawlError
 	{
 		/// <summary>
 		/// 

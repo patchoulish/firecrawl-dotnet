@@ -7,6 +7,6 @@ namespace Firecrawl
 	/// </summary>
 	public class FirecrawlResult
 	{
-
+		// This space intentionally left blank.
 	}
 }
