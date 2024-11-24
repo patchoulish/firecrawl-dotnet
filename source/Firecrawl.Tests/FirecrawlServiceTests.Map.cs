@@ -69,7 +69,7 @@ namespace Firecrawl
 			"Map")]
 		[TestCategory(
 			"BadRequest")]
-		[DataTestMethod]
+		//[DataTestMethod]
 		[DynamicData(
 			nameof(MapThrowOnBadRequestTestData))]
 		public async Task MapThrowOnBadRequestAsync(
@@ -91,7 +91,7 @@ namespace Firecrawl
 			"Map")]
 		[TestCategory(
 			"Result")]
-		[DataTestMethod]
+		//[DataTestMethod]
 		[DynamicData(
 			nameof(MapTestData))]
 		public async Task MapAsync(

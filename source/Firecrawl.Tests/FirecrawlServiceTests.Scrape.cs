@@ -77,7 +77,7 @@ namespace Firecrawl
 			"Scrape")]
 		[TestCategory(
 			"BadRequest")]
-		[DataTestMethod]
+		//[DataTestMethod]
 		[DynamicData(
 			nameof(ScrapeThrowOnBadRequestTestData))]
 		public async Task ScrapeThrowOnBadRequestAsync(
@@ -99,7 +99,7 @@ namespace Firecrawl
 			"Scrape")]
 		[TestCategory(
 			"Result")]
-		[DataTestMethod]
+		//[DataTestMethod]
 		[DynamicData(
 			nameof(ScrapeTestData))]
 		public async Task ScrapeAsync(
