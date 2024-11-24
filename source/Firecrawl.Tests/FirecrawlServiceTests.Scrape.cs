@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 using Microsoft;
 using Microsoft.VisualStudio;
@@ -22,10 +23,10 @@ namespace Firecrawl
 					new FirecrawlScrapeOptions()
 					{
 						Url = new Uri("https://www.reddit.com/"),
-						Formats =
-						[
+						Formats = new FirecrawlFormat[]
+						{
 							FirecrawlFormat.Markdown
-						],
+						}.ToImmutableArray(),
 					}
 				],
 			];
@@ -39,10 +40,10 @@ namespace Firecrawl
 					new FirecrawlScrapeOptions()
 					{
 						Url = new Uri("https://en.wikipedia.org/wiki/Main_Page"),
-						Formats =
-						[
+						Formats = new FirecrawlFormat[]
+						{
 							FirecrawlFormat.Markdown
-						],
+						}.ToImmutableArray(),
 					}
 				],
 			];
