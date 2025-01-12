@@ -1,0 +1,56 @@
+﻿using System;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Firecrawl
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class FirecrawlSearchDataMetadata
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonPropertyName(
+			"title")]
+		public string Title { get; init; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonPropertyName(
+			"description")]
+		public string Description { get; init; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonPropertyName(
+			"sourceURL")]
+		public string SourceUrl { get; init; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonPropertyName(
+			"statusCode")]
+		public int StatusCode { get; init; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonPropertyName(
+			"error")]
+		public string ErrorMessage { get; init; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonExtensionData]
+		public Dictionary<string, JsonElement> ExtensionData { get; init; }
+	}
+}

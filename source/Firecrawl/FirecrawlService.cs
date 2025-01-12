@@ -292,5 +292,52 @@ namespace Firecrawl
 					JsonSerializerOptions,
 					cancellationToken);
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="options"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<FirecrawlSearchResult> SearchAsync(
+			FirecrawlSearchOptions options,
+			CancellationToken cancellationToken = default)
+		{
+			Guard.NotNull(
+				options,
+				nameof(options));
+
+			// Serialize and POST the request...
+			var response =
+				await this.httpClient
+					.PostAsJsonAsync(
+						$"search",
+						options,
+						JsonSerializerOptions,
+						cancellationToken);
+
+			var responseString = await response.Content.ReadAsStringAsync();
+
+			// ...then deserialize the response and return the result.
+			return await response.Content
+				.ReadFromJsonAsync<FirecrawlSearchResult>(
+					JsonSerializerOptions,
+					cancellationToken);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<FirecrawlCreditUsageResult> GetCreditUsageAsync(
+			CancellationToken cancellationToken = default)
+		{
+			return await this.httpClient
+				.GetFromJsonAsync<FirecrawlCreditUsageResult>(
+					$"team/credit-usage",
+					JsonSerializerOptions,
+					cancellationToken);
+		}
 	}
 }

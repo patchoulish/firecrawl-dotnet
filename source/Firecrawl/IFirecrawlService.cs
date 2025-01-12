@@ -78,5 +78,23 @@ namespace Firecrawl
 		public Task<FirecrawlBatchScrapeStatusResult> GetBatchScrapeStatusAsync(
 			string id,
 			CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="options"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public Task<FirecrawlSearchResult> SearchAsync(
+			FirecrawlSearchOptions options,
+			CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public Task<FirecrawlCreditUsageResult> GetCreditUsageAsync(
+			CancellationToken cancellationToken = default);
 	}
 }
